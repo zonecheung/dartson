@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:mirrors' as mirrors;
 
 import './dartson.dart';
+import './dartson.dart' as dartson;
 import './src/static_entity.dart';
 import 'package:barback/barback.dart';
 import 'package:analyzer/analyzer.dart';
@@ -226,6 +227,9 @@ class FileCompiler extends _ErrorCollector {
         // run through all delegated variables
         member.fields.variables.forEach((VariableDeclaration d) {
 
+          // run through all delegated variables
+          if (d.name.name.startsWith("_")) return;
+
           // const and final properties are excluded
           if (d.isFinal || d.isConst) return;
           // skip ignored properties
@@ -242,6 +246,35 @@ class FileCompiler extends _ErrorCollector {
           list.add(new PropertyDefinition(
               type, typeArguments, serializedName, d.name.name));
         });
+      }
+      SkipMember:
+      if (member is MethodDeclaration && member.isGetter) {
+        Property dartEnt = _findDartsonProperty(member.metadata);
+
+        // parse the type and the assigned arguments for generic types
+        var type = member.returnType.name.name;
+        var typeArguments = [];
+
+        if (member.returnType.typeArguments != null) {
+          member.returnType.typeArguments.arguments
+              .forEach((arg) => typeArguments.add(arg.name.name));
+        }
+
+        if (member.name.name.startsWith("_")) break SkipMember;
+
+        // skip ignored properties
+        if (dartEnt != null && dartEnt.ignore) break SkipMember;
+
+        var serializedName = member.name.name;
+        // fetch the correct name of the entity
+        if (dartEnt != null &&
+            dartEnt.name != null &&
+            dartEnt.name.isNotEmpty) {
+          serializedName = dartEnt.name;
+        }
+
+        list.add(new PropertyDefinition(
+            type, typeArguments, serializedName, member.name.name));
       }
     });
 
