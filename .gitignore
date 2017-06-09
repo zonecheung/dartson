@@ -9,5 +9,7 @@ pubspec.lock
 .idea
 doc-viewer/
 test/tmp/
+.projects
+.packages
 .pub
 .packages

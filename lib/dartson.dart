@@ -100,7 +100,14 @@ class Dartson<T> {
   Map _serializeMap(Map object) {
     var map = {};
     object.forEach((k, v) {
-      if (v != null) map[k] = serialize(v);
+      if (v != null) {
+        if(_isSimpleType(v.runtimeType))
+        {
+          map[k] = v;
+        } else {
+          map[k] = serialize(v);
+        }
+      }
     });
     return map;
   }
@@ -146,6 +153,14 @@ class Dartson<T> {
       fieldName = prop.name;
     }
 
+    //Check if simple value
+    if(value != null && _isSimpleType(value.runtimeType) && (prop != null ? !prop.ignore : true) )
+    {
+      result[fieldName] = value;
+      return;
+    }
+
+    //Check if complex value
     if (value != null && (prop != null ? !prop.ignore : true)) {
       _log.finer("Serializing field: ${fieldName}");
       result[fieldName] = serialize(value);
