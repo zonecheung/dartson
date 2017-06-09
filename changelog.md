@@ -1,4 +1,9 @@
 # Changelog
+
+## 0.3.0 (06/09/2017)
+- doubles are serialized/deserialized properly
+- support for getters
+
 ## 0.2.6 (10/05/2015)
 - Bump dependency versions in pubspec
 
