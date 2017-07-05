@@ -21,7 +21,6 @@ final Map<String, TypeTransformer> _simpleTransformers = {
   _qn(List): _defaultSimpleTransformer,
   _qn(Map): _defaultSimpleTransformer,
   _qn(Object): _defaultSimpleTransformer,
-  _qn(double): _defaultSimpleTransformer,
   'dart.core._OneByteString': _defaultSimpleTransformer,
   'dart.core._Smi': _defaultSimpleTransformer
 };

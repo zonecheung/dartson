@@ -35,9 +35,9 @@ class DartsonTransformer extends Transformer {
 
   DartsonTransformer.asPlugin(BarbackSettings settings) : this();
 
-  Future<bool> isPrimary(AssetId inputId) {
+  Future<bool> isPrimary(AssetId inputId) async {
     if (inputId.extension != '.dart') {
-      return new Future.value(false);
+      return false;
     }
 
     // TODO: Create a real check to increase performance
@@ -46,12 +46,13 @@ class DartsonTransformer extends Transformer {
 
   Future apply(Transform transform) {
     var id = transform.primaryInput.id;
+    // TODO: that is not necessarily true - might want to transform from outside lib
     var url = id.path.startsWith('lib/')
         ? 'package:${id.package}/${id.path.substring(4)}'
         : id.path;
 
     return transform.primaryInput.readAsString().then((String content) {
-      var compiler = new FileCompiler.fromString(id, content);
+      var compiler = new FileCompiler.fromString(id.path, content);
       var code = compiler.build(url);
 
       if (compiler.hasEdits) {
@@ -225,7 +226,8 @@ class FileCompiler extends _ErrorCollector {
 
         // run through all delegated variables
         member.fields.variables.forEach((VariableDeclaration d) {
-
+          // run through all delegated variables
+          if (d.name.name.startsWith("_")) return;
           // const and final properties are excluded
           if (d.isFinal || d.isConst) return;
           // skip ignored properties
@@ -242,6 +244,36 @@ class FileCompiler extends _ErrorCollector {
           list.add(new PropertyDefinition(
               type, typeArguments, serializedName, d.name.name));
         });
+      }
+      // TODO (floitschG): review this
+      SkipMember:
+      if (member is MethodDeclaration && member.isGetter) {
+        Property dartEnt = _findDartsonProperty(member.metadata);
+
+        // parse the type and the assigned arguments for generic types
+        var type = member.returnType.name.name;
+        var typeArguments = [];
+
+        if (member.returnType.typeArguments != null) {
+          member.returnType.typeArguments.arguments
+              .forEach((arg) => typeArguments.add(arg.name.name));
+        }
+
+        if (member.name.name.startsWith("_")) break SkipMember;
+
+        // skip ignored properties
+        if (dartEnt != null && dartEnt.ignore) break SkipMember;
+
+        var serializedName = member.name.name;
+        // fetch the correct name of the entity
+        if (dartEnt != null &&
+            dartEnt.name != null &&
+            dartEnt.name.isNotEmpty) {
+          serializedName = dartEnt.name;
+        }
+
+        list.add(new PropertyDefinition(
+            type, typeArguments, serializedName, member.name.name));
       }
     });
 

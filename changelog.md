@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0+1
+- actually include logic to serialize getters
+
 ## 0.3.0 (06/09/2017)
 - doubles are serialized/deserialized properly
 - support for getters
