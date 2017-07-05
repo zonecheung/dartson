@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1
+- support for two byte strings
+
 ## 0.3.0+1
 - actually include logic to serialize getters
 
