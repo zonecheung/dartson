@@ -1,7 +1,7 @@
 library test_dartson;
 
-import '../lib/dartson.dart';
-import '../lib/type_transformer.dart';
+import 'package:dartson/dartson.dart';
+import 'package:dartson/type_transformer.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -14,7 +14,7 @@ void main() {
   });
 
   test('serialize: simple array test', () {
-    String str = dson.encode(['test1', 'test2']);
+    dynamic str = dson.encode(['test1', 'test2']);
     expect(str, '["test1","test2"]');
   });
 
@@ -82,7 +82,7 @@ void main() {
             new NestedClass("test", [1, 2, 3], new TestGetter("get it"))),
         '{"name":"test","list":[1,2,3],"getter":{"name":"get it"}}');
   });
-  
+
   test('serialize: utf8', () {
     expect(dson.encode('→'), equals('"→"'));
   });
@@ -206,7 +206,7 @@ void main() {
   test('parse: DateTime', () {
     var date = new DateTime.now();
     var ctg = dson.decode(
-        '{"testDate":"${date.toString()}"}', new SimpleDateContainer());
+        '{"testDate":"${date.toString()}"}', new SimpleDateContainer()) as SimpleDateContainer;
     expect(ctg.testDate is DateTime, true);
     expect(ctg.testDate == date, true);
   });

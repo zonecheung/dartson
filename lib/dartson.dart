@@ -29,7 +29,7 @@ class Dartson<T> {
 
   /// Constructor which sets JSON as the codec used for encoding and decoding.
   factory Dartson.JSON([String identifier = 'dartson']) =>
-      new Dartson(JSON, identifier);
+      new Dartson<T>(JSON, identifier);
 
   /// Registers a [transformer] for the specific [type] to this darston instance.
   addTransformer(TypeTransformer transformer, Type type) {
@@ -101,8 +101,7 @@ class Dartson<T> {
     var map = {};
     object.forEach((k, v) {
       if (v != null) {
-        if(_isSimpleType(v.runtimeType))
-        {
+        if (_isSimpleType(v.runtimeType)) {
           map[k] = v;
         } else {
           map[k] = serialize(v);
@@ -114,8 +113,7 @@ class Dartson<T> {
 
   Object _serializeObject(Object object) {
     var reflectee = reflect(object);
-    var symbolName = _getName(reflectee.type.qualifiedName),
-        transformer;
+    var symbolName = _getName(reflectee.type.qualifiedName), transformer;
 
     if ((transformer = _transformers[symbolName]) != null) {
       return transformer.encode(object);
@@ -154,8 +152,9 @@ class Dartson<T> {
     }
 
     //Check if simple value
-    if(value != null && _isSimpleType(value.runtimeType) && (prop != null ? !prop.ignore : true) )
-    {
+    if (value != null &&
+        _isSimpleType(value.runtimeType) &&
+        (prop != null ? !prop.ignore : true)) {
       result[fieldName] = value;
       return;
     }
@@ -214,8 +213,7 @@ class Dartson<T> {
   ///  Throws [IncorrectTypeTransform] if json data types doesn't match.
   ///  Throws [NoConstructorError]
   Object _convertValue(TypeMirror valueType, Object value, String key) {
-    var symbolName = _getName(valueType.qualifiedName),
-        transformer;
+    var symbolName = _getName(valueType.qualifiedName), transformer;
 
     _log.finer('Convert "${key}": $value to ${symbolName}');
 
@@ -274,7 +272,7 @@ class Dartson<T> {
 
     ClassMirror itemMirror = mapMirror.typeArguments[1];
     ClassMirror keyMirror = mapMirror.typeArguments[0];
-    InstanceMirror resultMap = _initiateClass(mapMirror);
+//    InstanceMirror resultMap = _initiateClass(mapMirror);
     Map reflectee = {};
 
     fillerMap.forEach((key, value) {

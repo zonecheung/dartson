@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+- strong mode enhancements
+- `Dartson` from `dartson_static.dart` now has T Generic to be compatible with `Dartson` in strong mode
+- apply code style
+- prepare travis integration
+
 ## 0.3.1
 - support for two byte strings
 

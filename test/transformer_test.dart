@@ -1,14 +1,14 @@
+@TestOn("vm")
 library dartson.transformer.test;
 
 import 'dart:io';
 
-import '../lib/transformer.dart';
-
-import 'package:analyzer/src/generated/ast.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:dartson/transformer.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-String get _testDirPath => p.dirname(p.fromUri(Platform.script));
+String get _testDirPath => p.join(p.current, 'test');
 
 void main() {
   // test the compiler

@@ -27,7 +27,7 @@ class _SimpleTypeTransformer extends TypeTransformer {
 }
 
 /// Static version of dartson.
-class Dartson extends TypeTransformerProvider {
+class Dartson<T> extends TypeTransformerProvider {
   final Codec _codec;
   final Logger _log;
   final Map<Type, TypeTransformer> transformers = {};

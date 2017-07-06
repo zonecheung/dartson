@@ -1,6 +1,6 @@
 part of dartson;
 
-class _SimpleTypeTransformer<T> extends TypeTransformer {
+class _SimpleTypeTransformer<T> extends TypeTransformer<T> {
   @override
   T decode(value) => value;
 

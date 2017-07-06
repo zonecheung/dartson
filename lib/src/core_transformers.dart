@@ -9,7 +9,7 @@ final Symbol _QN_DOUBLE = reflectClass(double).qualifiedName;
 
 var _qn = (Type t) => _getName(reflectClass(t).qualifiedName);
 
-final _defaultSimpleTransformer = new _SimpleTypeTransformer();
+final _defaultSimpleTransformer = new _SimpleTypeTransformer<dynamic>();
 
 /// These are dart.core.* Types that can be be used as they are.
 final Map<String, TypeTransformer> _simpleTransformers = {

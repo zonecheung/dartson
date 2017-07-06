@@ -14,7 +14,7 @@ class IncorrectTypeTransform extends Error {
 
   String toString() =>
       "IncorrectTypeTransform: Cannot transform field \"${_field}\" incorrect " +
-          "type. Requires [${_type}] and found [${_foundType}]";
+      "type. Requires [${_type}] and found [${_foundType}]";
 }
 
 /// This exception is thrown when a Class of [mirr] should be initiated but
@@ -27,7 +27,7 @@ class NoConstructorError extends Error {
 
   String toString() =>
       "No constructor found: Class [${_clazz}] doesn't have a constructor " +
-          "without arguments.";
+      "without arguments.";
 }
 
 /// This exception only appears in JavaScript if the [ENTITY_MAP] doesn't contain
